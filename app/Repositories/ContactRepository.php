@@ -6,7 +6,7 @@ use App\Models\Contact;
 
 class ContactRepository
 {
-    public function getAllContacts($pagination = 50)
+    public function getAllContacts($pagination = 5000)
     {
         return Contact::with(['phones', 'emails', 'addresses'])->paginate($pagination);
     }

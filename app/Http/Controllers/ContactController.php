@@ -27,6 +27,27 @@ class ContactController extends Controller
         return response()->json($updatedContact, 200);
     }
 
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'phones' => 'sometimes|array',
+            'phones.*.phone_number' => 'required|string|max:15',
+            'emails' => 'sometimes|array',
+            'emails.*.email_address' => 'required|email|max:255',
+            'addresses' => 'sometimes|array',
+            'addresses.*.street' => 'required|string|max:255',
+            'addresses.*.city' => 'required|string|max:255',
+            'addresses.*.zipcode' => 'required|string|max:10',
+        ]);
+
+        $newContact = $this->contactService->createContact($validatedData);
+
+        return response()->json($newContact, 201);
+    }
+
+
     public function index()
     {
         return $this->contactRepository->getAllContacts();
